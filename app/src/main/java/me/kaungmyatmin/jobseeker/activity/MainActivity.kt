@@ -9,16 +9,17 @@ import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 import me.kaungmyatmin.jobseeker.JobAdapter
+import me.kaungmyatmin.jobseeker.JobOnClickListener
 import me.kaungmyatmin.jobseeker.R
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),JobOnClickListener {
     private lateinit var jobAdapter: JobAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        jobAdapter = JobAdapter()
+        jobAdapter = JobAdapter(this)
 
         rvJob.apply {
             adapter = jobAdapter
@@ -53,6 +54,9 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
-
+    override fun onViewJobDetailClick(id: String) {
+        val intent =JobDetailActivity.newIntent(this,id)
+        startActivity(intent)
+    }
 
 }

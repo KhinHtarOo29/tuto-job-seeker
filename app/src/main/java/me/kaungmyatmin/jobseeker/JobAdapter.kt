@@ -10,7 +10,9 @@ import me.kaungmyatmin.jobseeker.model.Job
 
 class JobAdapter(
 
+    private val listener:JobOnClickListener
 ) : RecyclerView.Adapter<JobAdapter.MyRecyclerView>() {
+
 
     private val jobs = mutableListOf<Job>()
 
@@ -25,6 +27,9 @@ class JobAdapter(
 
     override fun onBindViewHolder(holder: MyRecyclerView, position: Int) {
         val job = jobs[position]
+        holder.itemView.setOnClickListener {
+            listener.onViewJobDetailClick(job.id)
+        }
 
     }
 

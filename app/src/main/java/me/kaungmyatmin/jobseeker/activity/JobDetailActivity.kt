@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
 import com.bumptech.glide.Glide
@@ -28,6 +29,35 @@ class JobDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_job_detail)
+        RestClient.getApiService()
+            .getJobDetail(getJobId())
+            .enqueue(object :Callback<Job>{
+                override fun onResponse(call: Call<Job>, response: Response<Job>) {
+                    if(response.isSuccessful){
+                        response.body()?.let {
+
+                            popolateUi(it)
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<Job>, t: Throwable) {
+                    Log.e("network", t.message?:"unknow error")
+                }
+            })
+    }
+
+    private fun popolateUi(job:Job){
+        tvDescription.text = HtmlCompat.fromHtml(job.description,HtmlCompat.FROM_HTML_MODE_COMPACT)
+        tvLink.setOnClickListener {
+
+            job.url
+        }
+        tvTitle.text = job.title
+        tvCompany.text = job.company
+        tvType.text = job.type
+        tvLocation.text = job.location
+        tvApply.text = job.how_to_apply
 
     }
 }
